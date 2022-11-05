@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: api-feed
+  name: api-feed
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: api-feed
+  template:
+    metadata:
+      labels:
+        app: api-feed
+    spec:
+      containers:
+      - name: api-feed
+        image: xolane/udagram-api-feed:latest
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 8080
+        envFrom:
+          - configMapRef:
+              name: udagram-env
+          - secretRef:
+              name: udagram-db-env
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "1024Mi"
+            cpu: "500m" 
+        volumeMounts:
+          - mountPath: "/root/.aws/"
+            name: aws-cred
+      volumes:
+        - name: aws-cred
+          configMap:
+            name: aws-cred
