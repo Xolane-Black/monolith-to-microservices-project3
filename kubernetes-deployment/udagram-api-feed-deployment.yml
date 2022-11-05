@@ -34,8 +34,8 @@ spec:
             cpu: "500m" 
         volumeMounts:
           - mountPath: "/root/.aws/"
-            name: aws-cred
+            name: aws-secret
       volumes:
-        - name: aws-cred
-          configMap:
-            name: aws-cred
+        - name: aws-secret
+          secret:
+            secretName: aws-secret
